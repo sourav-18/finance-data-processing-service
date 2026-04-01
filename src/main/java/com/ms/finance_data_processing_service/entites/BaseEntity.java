@@ -1,0 +1,33 @@
+package com.ms.finance_data_processing_service.entites;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import java.time.LocalDateTime;
+
+@MappedSuperclass
+@Getter
+@Setter
+public class BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @CreatedDate
+    @Column(nullable = false,
+            updatable = false,
+            name = "created_at",
+            columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
+    )
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(nullable = false,
+            name = "updated_at",
+            columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
+    )
+    private LocalDateTime updatedAt;
+}
