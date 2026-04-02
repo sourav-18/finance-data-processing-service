@@ -8,14 +8,20 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "users")
 @Getter
 @Setter
+@Table(name = "users",
+        indexes = {
+            @Index(name = "index_role",columnList = "role"),
+            @Index(name = "index_status",columnList = "status")
+        }
+)
 public class UserEntity extends BaseEntity {
 
     @Column(nullable = false)
     private String name;
 
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 
@@ -30,7 +36,7 @@ public class UserEntity extends BaseEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private UserStatusType status;
+    private UserStatusType status=UserStatusType.Active;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

@@ -14,16 +14,17 @@ import java.util.HashMap;
 @Service
 public class JwtService {
 
-    @Value("${jwt_secret}")
-    private static String SECRET;
+    @Value("${jwt.secret}")
+    private String SECRET;
 
-    public String generateToken(String username,String role){
-        HashMap<String, Object> claims=new HashMap<>();
-        claims.put("Role",role);
+    @Value("${jwt.expiry-time-in-minute}")
+    private int expiryTimeInMinute;
+
+    public String generateToken(String username,HashMap<String, Object> claims){
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis()+1000*60*30))
+                .setExpiration(new Date(System.currentTimeMillis()+ 1000L *60*expiryTimeInMinute))
                 .addClaims(claims)
                 .signWith(getSignedKey(), SignatureAlgorithm.HS256)
                 .compact();

@@ -1,0 +1,37 @@
+package com.ms.finance_data_processing_service.dtos.request;
+
+import com.ms.finance_data_processing_service.entites.Types.UserRoleType;
+import com.ms.finance_data_processing_service.entites.Types.UserStatusType;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.validator.constraints.URL;
+
+@Getter
+@Setter
+public class UserUpdateRequestDto {
+
+    @NotBlank(message = "Name is required filed")
+    @Size(min = 3 , max = 20 ,message = "Name must be between 3 to 20 character")
+    private String name;
+
+    @NotBlank(message = "Email is required filed")
+    @Email(message = "Email should be valid")
+    private String email;
+
+    @NotBlank(message = "Password is required filed")
+    @Size(min = 3 , max = 20 ,message = "password must be between 3 to 20 character")
+    private String password;
+
+    @NotNull(message = "Role is required filed")
+    private UserRoleType role;
+
+    @NotNull(message = "Status is required filed")
+    private UserStatusType status;
+
+    @URL(message = "ProfilePicture should be valid url")
+    private String profilePicture;
+}
