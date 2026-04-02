@@ -36,7 +36,7 @@ public class GlobalException {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ApiResponseMapper.error(
                         500,
-                        "Internal server error"));
+                        ex.getMessage()));
     }
 
 }

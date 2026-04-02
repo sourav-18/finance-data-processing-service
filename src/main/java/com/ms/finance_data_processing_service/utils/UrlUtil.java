@@ -6,4 +6,5 @@ public class UrlUtil {
 
     public static final String AUTH_URL = BASE_URL + VERSION + "/auth";
     public static final String USER_URL = BASE_URL + VERSION + "/users";
+    public static final String FINANCE_URL = BASE_URL + VERSION + "/finances";
 }
