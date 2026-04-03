@@ -1,9 +1,6 @@
 package com.ms.finance_data_processing_service.repositories;
 
-import com.ms.finance_data_processing_service.dtos.response.BalanceResponseDto;
-import com.ms.finance_data_processing_service.dtos.response.CategoryAmountResponseDto;
-import com.ms.finance_data_processing_service.dtos.response.FinanceResponseDto;
-import com.ms.finance_data_processing_service.dtos.response.UserResponseDto;
+import com.ms.finance_data_processing_service.dtos.response.*;
 import com.ms.finance_data_processing_service.entites.FinanceEntity;
 import com.ms.finance_data_processing_service.entites.Types.*;
 import com.ms.finance_data_processing_service.entites.UserEntity;
@@ -114,5 +111,22 @@ public interface FinanceRepository extends JpaRepository<FinanceEntity,Long> {
     List<CategoryAmountResponseDto> getCategoryAmount(
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate
+    );
+
+    @Query("""
+            SELECT new com.ms.finance_data_processing_service.dtos.response.BalanceByMonthResponseDto(
+            SUM(CASE WHEN F.type = com.ms.finance_data_processing_service.entites.Types.FinanceType.Income THEN amount ELSE 0 END) as income,
+            SUM(CASE WHEN F.type = com.ms.finance_data_processing_service.entites.Types.FinanceType.Expense THEN amount ELSE 0 END) as expense,
+            DATE_TRUNC('week',F.createdAt) as month
+            )
+            FROM FinanceEntity F
+            WHERE F.isDeleted = false
+            AND F.createdAt >= :statYear
+            AND F.createdAt < :endYear
+            GROUP BY DATE_TRUNC('week',createdAt)
+            """)
+    List<BalanceByMonthResponseDto> getBalanceByMonth(
+            @Param("statYear") LocalDateTime starYear,
+            @Param("endYear") LocalDateTime endYear
     );
 }

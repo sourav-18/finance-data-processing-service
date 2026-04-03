@@ -34,6 +34,22 @@ public class ConstantUtil {
     public static StartAndEndTimeUtil getStatAndEndDateTime(LocalDate starDate, LocalDate endDate) {
         LocalDateTime startDateTime = starDate == null ? null : starDate.atStartOfDay();
         LocalDateTime endDateTime = endDate == null ? null : endDate.plusDays(1).atStartOfDay().plusSeconds(-1);
-        return new StartAndEndTimeUtil(startDateTime,endDateTime);
+        return new StartAndEndTimeUtil(startDateTime, endDateTime);
     }
+
+    public final static List<String> months = List.of("January", "February", "March", "April", "May",
+            "June", "July", "August", "September", "October", "November", "December");
+
+    private final static List<String> weeks = List.of("Week-1", "Week-2", "Week-3", "Week-4", "Week-5", "Week-6", "Week-7");
+
+    public static LocalDateTime getStarYear(String inputYear) {
+        int year = inputYear == null ? LocalDateTime.now().getYear() :Integer.parseInt(inputYear);
+        return LocalDateTime.of(year, 1, 1, 0, 0, 0, 0);
+    }
+
+    public static LocalDateTime getEndYear(String inputYear) {
+        int year = inputYear == null ? LocalDateTime.now().getYear()+1 :Integer.parseInt(inputYear)+1;
+        return LocalDateTime.of(year, 1, 1, 0, 0, 0, 0);
+    }
+
 }
