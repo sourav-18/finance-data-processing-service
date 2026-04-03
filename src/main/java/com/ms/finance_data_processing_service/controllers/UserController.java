@@ -55,8 +55,8 @@ public class UserController {
     public ResponseEntity<ApiResponseDto<Void>> statusUpdate(HttpServletRequest request, @PathVariable Long id, @PathVariable UserStatusType status){
         Long loggedInUserId= (Long) request.getAttribute(ConstantUtil.REQUEST_USER_ID);
         userService.statusUpdate(id,status,loggedInUserId);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                .body(ApiResponseMapper.success(HttpStatus.NO_CONTENT.value(),"User status update successfully",null));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponseMapper.success(HttpStatus.OK.value(),"User status update successfully",null));
     }
 
     @PreAuthorize("hasRole('Admin')")
@@ -64,8 +64,8 @@ public class UserController {
     public ResponseEntity<ApiResponseDto<Void>> roleUpdate(HttpServletRequest request, @PathVariable Long id, @PathVariable UserRoleType role){
         Long loggedInUserId= (Long) request.getAttribute(ConstantUtil.REQUEST_USER_ID);
         userService.roleUpdate(id,role,loggedInUserId);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                .body(ApiResponseMapper.success(HttpStatus.NO_CONTENT.value(),"User role update successfully",null));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponseMapper.success(HttpStatus.OK.value(),"User role update successfully",null));
     }
 
     @PutMapping("/{id}")

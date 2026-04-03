@@ -32,4 +32,26 @@ public class FinanceResponseDto {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    public FinanceResponseDto(Long id,
+                              Long amount,
+                              FinanceType type,
+                              FinanceStatusType status,
+                              FinanceCategoryType category,
+                              String note,
+                              String createdBy,
+                              String updatedBy,
+                              LocalDateTime createdAt,
+                              LocalDateTime updatedAt) {
+        this.id = id;
+        this.amount = amount;
+        this.type = type;
+        this.category = category;
+        this.status = status;
+        this.note = note;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 }

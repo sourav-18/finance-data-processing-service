@@ -11,9 +11,16 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "finances",indexes = {
-        //todo
-})
+@Table(name = "finances",
+        indexes = {
+                @Index(name = "idx_finance_amount",columnList = "amount"),
+                @Index(name = "idx_finance_type",columnList = "type"),
+                @Index(name = "idx_finance_category",columnList = "category"),
+                @Index(name = "idx_finance_status",columnList = "status"),
+                @Index(name = "idx_finance_note",columnList = "note"),
+                @Index(name = "idx_finance_is_deleted",columnList = "is_deleted")
+        }
+)
 public class FinanceEntity extends BaseEntity{
 
     private Long amount;
@@ -32,12 +39,16 @@ public class FinanceEntity extends BaseEntity{
 
     private String note;
 
-    @JoinColumn(nullable = false,updatable = false)
+    @Column(name = "is_deleted",columnDefinition = "bool DEFAULT false",nullable = false)
+    private boolean isDeleted=false;
+
+    @JoinColumn(name = "created_by",nullable = false,updatable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private UserEntity createdBy;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "updated_by")
     @JsonIgnore
-    private UserEntity updateBy;
+    private UserEntity updatedBy;
 }
