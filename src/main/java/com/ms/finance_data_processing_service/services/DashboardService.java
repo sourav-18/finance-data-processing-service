@@ -1,13 +1,12 @@
 package com.ms.finance_data_processing_service.services;
 
-import com.ms.finance_data_processing_service.dtos.request.BalanceQueryRequestDto;
-import com.ms.finance_data_processing_service.dtos.request.CategoryAmountQueryRequestDto;
-import com.ms.finance_data_processing_service.dtos.request.DateUnitRequestDto;
+import com.ms.finance_data_processing_service.dtos.request.*;
 import com.ms.finance_data_processing_service.dtos.response.BalanceByMonthResponseDto;
 import com.ms.finance_data_processing_service.dtos.response.BalanceByWeekResponseDto;
 import com.ms.finance_data_processing_service.dtos.response.BalanceResponseDto;
 import com.ms.finance_data_processing_service.dtos.response.CategoryAmountResponseDto;
 import com.ms.finance_data_processing_service.entites.Types.FinanceCategoryType;
+import com.ms.finance_data_processing_service.entites.Types.FinanceStatusType;
 import com.ms.finance_data_processing_service.entites.Types.FinanceType;
 import com.ms.finance_data_processing_service.repositories.FinanceRepository;
 import com.ms.finance_data_processing_service.utils.ConstantUtil;
@@ -31,8 +30,14 @@ public class DashboardService {
         StartAndEndTimeUtil dateRange = ConstantUtil
                 .getStatAndEndDateTime(query.getStartDate(), query.getEndDate());
 
-        Long income = financeRepository.getTypeAmount(FinanceType.Income, dateRange.startDateTime(), dateRange.endDateTime());
-        Long expense = financeRepository.getTypeAmount(FinanceType.Expense, dateRange.startDateTime(), dateRange.endDateTime());
+        Long income = financeRepository.getTypeAmount(FinanceType.Income,
+                query.getStatus() == null ? null : FinanceStatusType.valueOf(query.getStatus()),
+                dateRange.startDateTime(), dateRange.endDateTime());
+
+        Long expense = financeRepository.getTypeAmount(FinanceType.Expense,
+                query.getStatus() == null ? null : FinanceStatusType.valueOf(query.getStatus()),
+                dateRange.startDateTime(), dateRange.endDateTime());
+
         long netBalance = income - expense;
         Boolean isProfit = netBalance > 0;
         return BalanceResponseDto.builder()
@@ -47,7 +52,8 @@ public class DashboardService {
                 .getStatAndEndDateTime(query.getStartDate(), query.getEndDate());
 
         List<CategoryAmountResponseDto> categoryAmounts = financeRepository
-                .getCategoryAmount(dateRange.startDateTime(), dateRange.endDateTime());
+                .getCategoryAmount(query.getStatus() == null ? null : FinanceStatusType.valueOf(query.getStatus()),
+                        dateRange.startDateTime(), dateRange.endDateTime());
 
         Map<FinanceCategoryType, Long> amountMap = categoryAmounts.stream()
                 .collect(Collectors.toMap(
@@ -62,15 +68,17 @@ public class DashboardService {
                 )).toList();
     }
 
-    public List<BalanceByMonthResponseDto> getBalanceByMonth(DateUnitRequestDto DateUnit) {
+    public List<BalanceByMonthResponseDto> getBalanceByMonth(BalanceByMonthQueryRequestDto query) {
 
-        LocalDateTime currentYear = ConstantUtil.getStarYear(DateUnit.getIntegerYear());
-        LocalDateTime nextYear = ConstantUtil.getEndYear(DateUnit.getIntegerYear());
+        LocalDateTime currentYear = ConstantUtil.getStarYear(query.getIntegerYear());
+        LocalDateTime nextYear = ConstantUtil.getEndYear(query.getIntegerYear());
 
         List<BalanceByMonthResponseDto> allMonthBalance = ConstantUtil.months.stream().map(BalanceByMonthResponseDto::new).toList();
 
         List<BalanceByMonthResponseDto> monthBalances = financeRepository
-                .getBalanceByMonth(currentYear, nextYear);
+                .getBalanceByMonth(
+                        query.getStatus() == null ? null : FinanceStatusType.valueOf(query.getStatus()),
+                        currentYear, nextYear);
 
         for (BalanceByMonthResponseDto monthBalance : monthBalances) {
             int monthIndex = monthBalance.getDateTime().getMonthValue() - 1;
@@ -85,11 +93,13 @@ public class DashboardService {
         return allMonthBalance;
     }
 
-    public List<BalanceByWeekResponseDto> getBalanceByWeek(DateUnitRequestDto DateUnit) {
+    public List<BalanceByWeekResponseDto> getBalanceByWeek(BalanceByWeekQueryRequestDto query) {
 
-        List<BalanceByWeekResponseDto> allWeeks = getAllWeeks(DateUnit.getIntegerYear(), DateUnit.getIntegerMonth());
+        List<BalanceByWeekResponseDto> allWeeks = getAllWeeks(query.getIntegerYear(), query.getIntegerMonth());
         for (BalanceByWeekResponseDto week : allWeeks) {
-            BalanceByWeekResponseDto balance = financeRepository.getBalanceByWeek(week.getFrom(), week.getTo());
+            BalanceByWeekResponseDto balance = financeRepository.getBalanceByWeek(
+                    query.getStatus() == null ? null : FinanceStatusType.valueOf(query.getStatus()),
+                    week.getFrom(), week.getTo());
             week.setIncome(balance.getIncome() == null ? 0L : balance.getIncome());
             week.setExpense(balance.getExpense() == null ? 0L : balance.getExpense());
             week.setNetBalance(week.getIncome() - week.getExpense());

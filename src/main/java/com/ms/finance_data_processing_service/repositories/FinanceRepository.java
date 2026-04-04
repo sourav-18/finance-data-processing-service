@@ -79,11 +79,13 @@ public interface FinanceRepository extends JpaRepository<FinanceEntity,Long> {
             FROM FinanceEntity F
             WHERE F.isDeleted = false
             AND F.type = :type
+            AND (:status IS NULL OR F.status=:status)
             AND (F.createdAt >= COALESCE(:startDate, F.createdAt))
             AND (F.createdAt <= COALESCE(:endDate, F.createdAt))
 """)
     Long getTypeAmount(
             @Param("type") FinanceType type,
+            @Param("status") FinanceStatusType status,
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate
     );
@@ -95,11 +97,13 @@ public interface FinanceRepository extends JpaRepository<FinanceEntity,Long> {
             F.category AS category)
             FROM FinanceEntity F
             WHERE F.isDeleted = false
+            AND (:status IS NULL OR F.status=:status)
             AND (F.createdAt >= COALESCE(:startDate, F.createdAt))
             AND (F.createdAt <= COALESCE(:endDate, F.createdAt))
             GROUP BY F.category
 """)
     List<CategoryAmountResponseDto> getCategoryAmount(
+            @Param("status") FinanceStatusType status,
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate
     );
@@ -112,11 +116,13 @@ public interface FinanceRepository extends JpaRepository<FinanceEntity,Long> {
             )
             FROM FinanceEntity F
             WHERE F.isDeleted = false
+            AND (:status IS NULL OR F.status=:status)
             AND F.createdAt >= :statDate
             AND F.createdAt < :endDate
             GROUP BY DATE_TRUNC('MONTH',createdAt)
             """)
     List<BalanceByMonthResponseDto> getBalanceByMonth(
+            @Param("status") FinanceStatusType status,
             @Param("statDate") LocalDateTime starYear,
             @Param("endDate") LocalDateTime endYear
     );
@@ -127,10 +133,12 @@ public interface FinanceRepository extends JpaRepository<FinanceEntity,Long> {
             )
             FROM FinanceEntity F
             WHERE F.isDeleted = false
+            AND (:status IS NULL OR F.status=:status)
             AND F.createdAt >= :statDate
             AND F.createdAt < :endDate
             """)
     BalanceByWeekResponseDto getBalanceByWeek(
+            @Param("status") FinanceStatusType status,
             @Param("statDate") LocalDateTime starYear,
             @Param("endDate") LocalDateTime endYear
     );

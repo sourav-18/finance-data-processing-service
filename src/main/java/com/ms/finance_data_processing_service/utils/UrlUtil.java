@@ -8,4 +8,6 @@ public class UrlUtil {
     public static final String USER_URL = BASE_URL + VERSION + "/users";
     public static final String FINANCE_URL = BASE_URL + VERSION + "/finances";
     public static final String DASHBOARD_URL = BASE_URL + VERSION + "/dashboards";
+    public static final String STATIC_URL = BASE_URL + VERSION + "/statics";
+    public static final String SWAGGER_URL =  "/swagger-ui";
 }

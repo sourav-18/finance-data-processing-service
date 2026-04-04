@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CategoryAmountQueryRequestDto extends BaseDateRangeDto{
+public class BalanceByMonthQueryRequestDto extends DateUnitRequestDto{
     @ValidEnum(enumClass = FinanceStatusType.class,field = "Status")
     private String status;
 }

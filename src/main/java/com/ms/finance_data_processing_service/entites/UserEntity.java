@@ -13,7 +13,8 @@ import lombok.Setter;
 @Table(name = "users",
         indexes = {
             @Index(name = "idx_user_role",columnList = "role"),
-            @Index(name = "idx_role_status",columnList = "status")
+            @Index(name = "idx_user_status",columnList = "status"),
+            @Index(name="idx_user_created_at",columnList = "created_at")
         }
 )
 public class UserEntity extends BaseEntity {

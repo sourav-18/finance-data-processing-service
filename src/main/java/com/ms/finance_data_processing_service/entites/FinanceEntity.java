@@ -18,7 +18,8 @@ import lombok.Setter;
                 @Index(name = "idx_finance_category",columnList = "category"),
                 @Index(name = "idx_finance_status",columnList = "status"),
                 @Index(name = "idx_finance_note",columnList = "note"),
-                @Index(name = "idx_finance_is_deleted",columnList = "is_deleted")
+                @Index(name = "idx_finance_is_deleted",columnList = "is_deleted"),
+                @Index(name="idx_finance_created_at",columnList = "created_at")
         }
 )
 public class FinanceEntity extends BaseEntity{

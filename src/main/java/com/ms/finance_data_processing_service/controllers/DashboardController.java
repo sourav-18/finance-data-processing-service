@@ -1,8 +1,6 @@
 package com.ms.finance_data_processing_service.controllers;
 
-import com.ms.finance_data_processing_service.dtos.request.BalanceQueryRequestDto;
-import com.ms.finance_data_processing_service.dtos.request.CategoryAmountQueryRequestDto;
-import com.ms.finance_data_processing_service.dtos.request.DateUnitRequestDto;
+import com.ms.finance_data_processing_service.dtos.request.*;
 import com.ms.finance_data_processing_service.dtos.response.*;
 import com.ms.finance_data_processing_service.mappers.ApiResponseMapper;
 import com.ms.finance_data_processing_service.services.DashboardService;
@@ -11,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +23,7 @@ public class DashboardController {
 
     private final DashboardService dashboardService;
 
+    @PreAuthorize("hasAnyRole('Admin','Analyst')")
     @GetMapping("/balance")
     public ResponseEntity<ApiResponseDto<BalanceResponseDto>> getBalance(
             @ModelAttribute @Valid BalanceQueryRequestDto query
@@ -34,6 +34,7 @@ public class DashboardController {
                         dashboardService.getBalance(query)));
     }
 
+    @PreAuthorize("hasAnyRole('Admin','Analyst')")
     @GetMapping("/category-amounts")
     public ResponseEntity<ApiResponseDto<List<CategoryAmountResponseDto>>> getCategoryAmount(
             @ModelAttribute @Valid CategoryAmountQueryRequestDto query
@@ -45,25 +46,27 @@ public class DashboardController {
 
     }
 
+    @PreAuthorize("hasAnyRole('Admin','Analyst')")
     @GetMapping("/balance-by-month")
     public ResponseEntity<ApiResponseDto<List<BalanceByMonthResponseDto>>> getBalanceByMonth(
-            @Valid @ModelAttribute DateUnitRequestDto dateUnit
+            @Valid @ModelAttribute BalanceByMonthQueryRequestDto query
     ) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponseMapper.success(HttpStatus.OK.value(),
                         "Monthly balance fetch successfully",
-                        dashboardService.getBalanceByMonth(dateUnit)));
+                        dashboardService.getBalanceByMonth(query)));
 
     }
 
+    @PreAuthorize("hasAnyRole('Admin','Analyst')")
     @GetMapping("/balance-by-week")
     public ResponseEntity<ApiResponseDto<List<BalanceByWeekResponseDto>>> getBalanceByWeek(
-            @Valid @ModelAttribute DateUnitRequestDto dateUnit
+            @Valid @ModelAttribute BalanceByWeekQueryRequestDto query
             ) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponseMapper.success(HttpStatus.OK.value(),
                         "Weekly balance fetch successfully",
-                        dashboardService.getBalanceByWeek(dateUnit)));
+                        dashboardService.getBalanceByWeek(query)));
 
     }
 

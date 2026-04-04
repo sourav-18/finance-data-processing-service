@@ -36,7 +36,10 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if(request.getRequestURI().startsWith(UrlUtil.AUTH_URL)){
+        if(request.getRequestURI().startsWith(UrlUtil.AUTH_URL)
+           ||request.getRequestURI().startsWith("/v3/api-docs")
+           ||request.getRequestURI().startsWith("/swagger-ui/")
+        ){
             filterChain.doFilter(request, response);
             return;
         }

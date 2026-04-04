@@ -47,9 +47,11 @@ public class FinanceController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseDto<FinanceResponseDto>> details(
+            HttpServletRequest request,
             @PathVariable Long id,
             @RequestParam(defaultValue = "false") boolean deleted
         ){
+        System.out.println(request.getRemoteAddr());
         FinanceResponseDto apiResponse = financeService.details(id,deleted);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponseMapper.success(HttpStatus.OK.value(), "Finance details fetch successfully", apiResponse));
