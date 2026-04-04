@@ -19,6 +19,7 @@ public class RateLimiterService {
     private final RedisTemplate<String, String> redisTemplate;
 
     public boolean isUserHaveToken(String userId){
+//        System.out.println(bucketCount);
         String key="global:rate-limit:"+userId;
         Long current=redisTemplate.opsForValue().increment(key);
         if(current==1){

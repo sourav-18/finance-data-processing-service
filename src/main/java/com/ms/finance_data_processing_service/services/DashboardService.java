@@ -113,6 +113,7 @@ public class DashboardService {
         LocalDateTime dateTime = ConstantUtil.getStarMonth(year, month);
         int weekIndex = 0;
         List<BalanceByWeekResponseDto> allWeeks = new LinkedList<>();
+        month=dateTime.getMonthValue();
         while (dateTime.getMonthValue() == month) {
             LocalDateTime nextWeek = dateTime.plusDays(7);
             if (nextWeek.getMonthValue() > month) {

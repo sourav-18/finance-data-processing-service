@@ -29,6 +29,7 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(UrlUtil.AUTH_URL+"/**").permitAll()
+                        .requestMatchers(UrlUtil.HEALTH_URL).permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(ex->ex
