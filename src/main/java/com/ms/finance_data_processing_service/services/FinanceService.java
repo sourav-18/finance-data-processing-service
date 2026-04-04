@@ -5,7 +5,9 @@ import com.ms.finance_data_processing_service.dtos.request.FinanceListRequestQue
 import com.ms.finance_data_processing_service.dtos.request.FinanceUpdateRequestDto;
 import com.ms.finance_data_processing_service.dtos.response.FinanceResponseDto;
 import com.ms.finance_data_processing_service.entites.FinanceEntity;
+import com.ms.finance_data_processing_service.entites.Types.FinanceCategoryType;
 import com.ms.finance_data_processing_service.entites.Types.FinanceStatusType;
+import com.ms.finance_data_processing_service.entites.Types.FinanceType;
 import com.ms.finance_data_processing_service.exceptions.ApiError;
 import com.ms.finance_data_processing_service.exceptions.ApiErrorException;
 import com.ms.finance_data_processing_service.mappers.FinanceMapper;
@@ -46,11 +48,11 @@ public class FinanceService {
     }
 
     @Transactional
-    public void statusUpdate(Long id, FinanceStatusType status, Long loggedInUserId) {
+    public void statusUpdate(Long id, String status, Long loggedInUserId) {
         int updateCount = financeRepository
                 .statusUpdateById(
                         id,
-                        status,
+                        FinanceStatusType.valueOf(status),
                         userRepository.getReferenceById(loggedInUserId)
                 );
         if (updateCount == 0) {
@@ -83,9 +85,9 @@ public class FinanceService {
         Pageable pageable = PageRequest.of(query.getPage() - 1, query.getLimit(), sortOrder);
         Page<FinanceResponseDto> financeList = financeRepository.list(
                 id,
-                query.getType(),
-                query.getStatus(),
-                query.getCategory(),
+                query.getType()==null?null:FinanceType.valueOf(query.getType()),
+                query.getStatus()==null?null:FinanceStatusType.valueOf(query.getStatus()),
+                query.getCategory()==null?null:FinanceCategoryType.valueOf(query.getCategory()),
                 query.getCreatedBy(),
                 query.getSearch(),
                 query.getNote(),

@@ -1,6 +1,7 @@
 package com.ms.finance_data_processing_service.dtos.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ms.finance_data_processing_service.dtos.validations.ValidEnum;
 import com.ms.finance_data_processing_service.entites.Types.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
@@ -24,11 +25,14 @@ public class FinanceListRequestQueryDto extends BaseDateRangeDto{
     @Size(min = 2, max = 20, message = "sort must be between {min} to {max} character")
     private String sort;
 
-    private FinanceStatusType status;
+    @ValidEnum(enumClass = FinanceType.class,field = "Type")
+    private String type;
 
-    private FinanceCategoryType category;
+    @ValidEnum(enumClass = FinanceCategoryType.class,field = "Category")
+    private String category;
 
-    private FinanceType type;
+    @ValidEnum(enumClass = FinanceStatusType.class,field = "Status")
+    private String status;
 
     @Min(value = 1,message = "createBy should be at least {value}")
     private Long createdBy;

@@ -40,16 +40,26 @@ public class ConstantUtil {
     public final static List<String> months = List.of("January", "February", "March", "April", "May",
             "June", "July", "August", "September", "October", "November", "December");
 
-    private final static List<String> weeks = List.of("Week-1", "Week-2", "Week-3", "Week-4", "Week-5", "Week-6", "Week-7");
+    public final static List<String> weeks = List.of("Week-1", "Week-2", "Week-3", "Week-4", "Week-5", "Week-6", "Week-7");
 
-    public static LocalDateTime getStarYear(String inputYear) {
-        int year = inputYear == null ? LocalDateTime.now().getYear() :Integer.parseInt(inputYear);
+    public static LocalDateTime getStarYear(Integer inputYear) {
+        int year = inputYear == null ? LocalDateTime.now().getYear() :inputYear;
         return LocalDateTime.of(year, 1, 1, 0, 0, 0, 0);
     }
 
-    public static LocalDateTime getEndYear(String inputYear) {
-        int year = inputYear == null ? LocalDateTime.now().getYear()+1 :Integer.parseInt(inputYear)+1;
+    public static LocalDateTime getEndYear(Integer inputYear) {
+        int year = inputYear == null ? LocalDateTime.now().getYear()+1 :inputYear+1;
         return LocalDateTime.of(year, 1, 1, 0, 0, 0, 0);
     }
+    public static LocalDateTime getStarMonth(Integer inputYear,Integer inputMonth) {
+        int year = inputYear == null ? LocalDateTime.now().getYear() :inputYear;
+        int month = inputMonth == null ? LocalDateTime.now().getMonthValue() :inputMonth;
+        return LocalDateTime.of(year, month, 1, 0, 0, 0, 0);
+    }
+//    public static LocalDateTime getEndMonth(Integer inputYear,Integer inputMonth) {
+//        int year = inputYear == null ? LocalDateTime.now().getYear() :inputYear;
+//        int month = inputMonth == null ? LocalDateTime.now().getMonthValue()+1 :inputMonth+1;
+//        return LocalDateTime.of(year, month, 1, 0, 0, 0, 0);
+//    }
 
 }

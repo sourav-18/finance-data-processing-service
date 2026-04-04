@@ -1,5 +1,6 @@
 package com.ms.finance_data_processing_service.dtos.request;
 
+import com.ms.finance_data_processing_service.dtos.validations.ValidEnum;
 import com.ms.finance_data_processing_service.entites.Types.FinanceCategoryType;
 import com.ms.finance_data_processing_service.entites.Types.FinanceStatusType;
 import com.ms.finance_data_processing_service.entites.Types.FinanceType;
@@ -19,13 +20,16 @@ public class FinanceUpdateRequestDto {
     private Long amount;
 
     @NotNull(message = "Type is required")
-    private FinanceType type;
+    @ValidEnum(enumClass = FinanceType.class,field = "Type")
+    private String type;
 
     @NotNull(message = "category is required")
-    private FinanceCategoryType category;
+    @ValidEnum(enumClass = FinanceCategoryType.class,field = "Category")
+    private String category;
 
     @NotNull(message = "status is required")
-    private FinanceStatusType status;
+    @ValidEnum(enumClass = FinanceStatusType.class,field = "Status")
+    private String status;
 
     private String note;
 }

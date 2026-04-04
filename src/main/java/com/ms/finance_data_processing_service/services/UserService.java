@@ -73,11 +73,11 @@ public class UserService {
     }
 
     @Transactional
-    public void statusUpdate(Long userId, UserStatusType status, Long loggedInUserId) {
+    public void statusUpdate(Long userId, String status, Long loggedInUserId) {
         int updateCount = userRepository
                 .statusUpdateById(
                         userId,
-                        status,
+                        UserStatusType.valueOf(status),
                         userRepository.getReferenceById(loggedInUserId)
                 );
         if (updateCount == 0) {
@@ -87,11 +87,11 @@ public class UserService {
     }
 
     @Transactional
-    public void roleUpdate(Long userId, UserRoleType role, Long loggedInUserId) {
+    public void roleUpdate(Long userId, String role, Long loggedInUserId) {
         int updateCount = userRepository
                 .roleUpdateById(
                         userId,
-                        role,
+                        UserRoleType.valueOf(role),
                         userRepository.getReferenceById(loggedInUserId)
                 );
         if (updateCount == 0) {

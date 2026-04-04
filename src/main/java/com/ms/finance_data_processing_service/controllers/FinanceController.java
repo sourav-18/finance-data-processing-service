@@ -6,6 +6,7 @@ import com.ms.finance_data_processing_service.dtos.response.ApiPageResponseDto;
 import com.ms.finance_data_processing_service.dtos.response.ApiResponseDto;
 import com.ms.finance_data_processing_service.dtos.response.FinanceResponseDto;
 import com.ms.finance_data_processing_service.dtos.response.UserResponseDto;
+import com.ms.finance_data_processing_service.dtos.validations.ValidEnum;
 import com.ms.finance_data_processing_service.entites.FinanceEntity;
 import com.ms.finance_data_processing_service.entites.Types.FinanceStatusType;
 import com.ms.finance_data_processing_service.entites.Types.UserStatusType;
@@ -21,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.http.HttpResponse;
@@ -28,6 +30,7 @@ import java.net.http.HttpResponse;
 @RestController
 @RequestMapping(UrlUtil.FINANCE_URL)
 @RequiredArgsConstructor
+@Validated
 public class FinanceController {
 
     private final FinanceService financeService;
@@ -54,7 +57,8 @@ public class FinanceController {
 
     @PreAuthorize("hasRole('Admin')")
     @PatchMapping("/{id}/status/{status}")
-    public ResponseEntity<ApiResponseDto<Void>> statusUpdate(HttpServletRequest request, @PathVariable Long id, @PathVariable FinanceStatusType status){
+    public ResponseEntity<ApiResponseDto<Void>> statusUpdate(HttpServletRequest request, @PathVariable Long id,
+             @ValidEnum(enumClass = FinanceStatusType.class,field = "status") @PathVariable String status){
         Long loggedInUserId= (Long) request.getAttribute(ConstantUtil.REQUEST_USER_ID);
         financeService.statusUpdate(id,status,loggedInUserId);
         return ResponseEntity.status(HttpStatus.OK)

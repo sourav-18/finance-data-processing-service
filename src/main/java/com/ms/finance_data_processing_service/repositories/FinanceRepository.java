@@ -74,15 +74,6 @@ public interface FinanceRepository extends JpaRepository<FinanceEntity,Long> {
             @Param("endDate") LocalDateTime endDate,
             Pageable pageable);
 
-//    @Query("""
-//            SELECT
-//            SUM(CASE WHEN type=:income THEN amount ELSE 0 END),
-//            SUM(CASE WHEN type=:expense THEN amount ELSE 0 END)
-//            FROM FinanceEntity WHERE isDeleted=false
-//            GROUP BY id
-//            """)
-//    Object getBalance(FinanceType income,FinanceType expense);
-
     @Query("""
             SELECT COALESCE(SUM(F.amount), 0)
             FROM FinanceEntity F
@@ -115,18 +106,32 @@ public interface FinanceRepository extends JpaRepository<FinanceEntity,Long> {
 
     @Query("""
             SELECT new com.ms.finance_data_processing_service.dtos.response.BalanceByMonthResponseDto(
-            SUM(CASE WHEN F.type = com.ms.finance_data_processing_service.entites.Types.FinanceType.Income THEN amount ELSE 0 END) as income,
+            SUM (CASE WHEN F.type = com.ms.finance_data_processing_service.entites.Types.FinanceType.Income THEN amount ELSE 0 END) as income,
             SUM(CASE WHEN F.type = com.ms.finance_data_processing_service.entites.Types.FinanceType.Expense THEN amount ELSE 0 END) as expense,
-            DATE_TRUNC('week',F.createdAt) as month
+            DATE_TRUNC('MONTH',F.createdAt) as dateTime
             )
             FROM FinanceEntity F
             WHERE F.isDeleted = false
-            AND F.createdAt >= :statYear
-            AND F.createdAt < :endYear
-            GROUP BY DATE_TRUNC('week',createdAt)
+            AND F.createdAt >= :statDate
+            AND F.createdAt < :endDate
+            GROUP BY DATE_TRUNC('MONTH',createdAt)
             """)
     List<BalanceByMonthResponseDto> getBalanceByMonth(
-            @Param("statYear") LocalDateTime starYear,
-            @Param("endYear") LocalDateTime endYear
+            @Param("statDate") LocalDateTime starYear,
+            @Param("endDate") LocalDateTime endYear
+    );
+    @Query("""
+            SELECT new com.ms.finance_data_processing_service.dtos.response.BalanceByWeekResponseDto(
+            SUM(CASE WHEN F.type = com.ms.finance_data_processing_service.entites.Types.FinanceType.Income THEN amount ELSE 0 END) as income,
+            SUM(CASE WHEN F.type = com.ms.finance_data_processing_service.entites.Types.FinanceType.Expense THEN amount ELSE 0 END) as expense
+            )
+            FROM FinanceEntity F
+            WHERE F.isDeleted = false
+            AND F.createdAt >= :statDate
+            AND F.createdAt < :endDate
+            """)
+    BalanceByWeekResponseDto getBalanceByWeek(
+            @Param("statDate") LocalDateTime starYear,
+            @Param("endDate") LocalDateTime endYear
     );
 }

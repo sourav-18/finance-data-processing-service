@@ -3,6 +3,7 @@ package com.ms.finance_data_processing_service.mappers;
 import com.ms.finance_data_processing_service.dtos.request.UserCreateRequestDto;
 import com.ms.finance_data_processing_service.dtos.request.UserUpdateRequestDto;
 import com.ms.finance_data_processing_service.dtos.response.UserResponseDto;
+import com.ms.finance_data_processing_service.entites.Types.UserRoleType;
 import com.ms.finance_data_processing_service.entites.UserEntity;
 
 public class UserMapper {
@@ -24,7 +25,7 @@ public class UserMapper {
         UserEntity newUser=new UserEntity();
         newUser.setName(createBody.getName());
         newUser.setEmail(createBody.getEmail());
-        newUser.setRole(createBody.getRole());
+        newUser.setRole(UserRoleType.valueOf(createBody.getRole()));
         newUser.setProfilePicture(createBody.getProfilePicture());
         return newUser;
     }

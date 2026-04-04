@@ -1,5 +1,6 @@
 package com.ms.finance_data_processing_service.dtos.request;
 
+import com.ms.finance_data_processing_service.dtos.validations.ValidEnum;
 import com.ms.finance_data_processing_service.entites.Types.UserRoleType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -25,7 +26,8 @@ public class UserCreateRequestDto {
     private String password;
 
     @NotNull(message = "Role is required filed")
-    private UserRoleType role;
+    @ValidEnum(enumClass = UserRoleType.class,field = "Role")
+    private String role;
 
     private String profilePicture;
 }

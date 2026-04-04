@@ -4,15 +4,18 @@ import com.ms.finance_data_processing_service.dtos.request.FinanceCreateRequestD
 import com.ms.finance_data_processing_service.dtos.request.FinanceUpdateRequestDto;
 import com.ms.finance_data_processing_service.dtos.response.FinanceResponseDto;
 import com.ms.finance_data_processing_service.entites.FinanceEntity;
+import com.ms.finance_data_processing_service.entites.Types.FinanceCategoryType;
+import com.ms.finance_data_processing_service.entites.Types.FinanceStatusType;
+import com.ms.finance_data_processing_service.entites.Types.FinanceType;
 
 public class FinanceMapper {
 
     public static FinanceEntity toEntity(FinanceCreateRequestDto body){
         FinanceEntity finance=new FinanceEntity();
         finance.setAmount(body.getAmount());
-        finance.setType(body.getType());
-        finance.setCategory(body.getCategory());
-        finance.setStatus(body.getStatus());
+        finance.setType(FinanceType.valueOf(body.getType()));
+        finance.setCategory(FinanceCategoryType.valueOf(body.getCategory()));
+        finance.setStatus(FinanceStatusType.valueOf(body.getStatus()));
         finance.setNote(body.getNote()==null?null:body.getNote().trim());
         return finance;
     }
@@ -34,9 +37,9 @@ public class FinanceMapper {
 
     public static void updateEntity(FinanceEntity finance, FinanceUpdateRequestDto body){
         finance.setAmount(body.getAmount());
-        finance.setType(body.getType());
-        finance.setCategory(body.getCategory());
-        finance.setStatus(body.getStatus());
+        finance.setType(FinanceType.valueOf(body.getType()));
+        finance.setCategory(FinanceCategoryType.valueOf(body.getCategory()));
+        finance.setStatus(FinanceStatusType.valueOf(body.getStatus()));
         finance.setNote(body.getNote()==null?null:body.getNote().trim());
     }
 
