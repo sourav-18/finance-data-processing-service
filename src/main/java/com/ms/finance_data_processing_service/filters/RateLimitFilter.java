@@ -30,9 +30,14 @@ public class RateLimitFilter extends OncePerRequestFilter {
             return;
         }
 
-        System.out.println("remoter arr "+request.getRemoteAddr());
+        String ip = request.getHeader("X-Forwarded-For");
+        if (ip == null || ip.isEmpty()) {
+            ip = request.getRemoteAddr();
+        }
 
-        boolean isAllow=rateLimiterService.isUserHaveToken(request.getRemoteAddr());
+        System.out.println("remoter arr "+ip);
+
+        boolean isAllow=rateLimiterService.isUserHaveToken(ip);
         if(isAllow){
             filterChain.doFilter(request,response);
         }else {
